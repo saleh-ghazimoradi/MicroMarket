@@ -3,7 +3,7 @@ package main
 import "context"
 
 type accountResolver struct {
-	server *Server
+	server *GraphqlServer
 }
 
 func (a *accountResolver) Orders(ctx context.Context, account *Account) ([]*Order, error) {

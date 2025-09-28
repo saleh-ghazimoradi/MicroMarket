@@ -3,17 +3,17 @@ package main
 import "context"
 
 type mutationResolver struct {
-	server *Server
+	server *GraphqlServer
 }
 
-func (m *mutationResolver) createAccount(ctx context.Context, input AccountInput) (*Account, error) {
+func (m *mutationResolver) CreateAccount(ctx context.Context, input AccountInput) (*Account, error) {
 	return nil, nil
 }
 
-func (m *mutationResolver) createProduct(ctx context.Context, input ProductInput) (*Product, error) {
+func (m *mutationResolver) CreateProduct(ctx context.Context, input ProductInput) (*Product, error) {
 	return nil, nil
 }
 
-func (m *mutationResolver) createOrder(ctx context.Context, input OrderInput) (*Order, error) {
+func (m *mutationResolver) CreateOrder(ctx context.Context, input OrderInput) (*Order, error) {
 	return nil, nil
 }

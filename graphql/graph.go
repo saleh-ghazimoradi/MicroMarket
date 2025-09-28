@@ -2,13 +2,13 @@ package main
 
 import "github.com/99designs/gqlgen/graphql"
 
-type Server struct {
+type GraphqlServer struct {
 	//accountClient *account.Client
 	//catalogClient *catalog.Client
 	//orderClient   *orderClient
 }
 
-func NewGraphqlServer(accountURL, catalogURL, orderURL string) (*Server, error) {
+func NewGraphqlServer(accountURL, catalogURL, orderURL string) (*GraphqlServer, error) {
 	//accountClient, err := account.NewClient(accountURL)
 	//if err != nil {
 	//	return nil, err
@@ -27,31 +27,31 @@ func NewGraphqlServer(accountURL, catalogURL, orderURL string) (*Server, error) 
 	//	return nil, err
 	//}
 
-	return &Server{
+	return &GraphqlServer{
 		//accountClient,
 		//catalogClient,
 		//orderClient,
 	}, nil
 }
 
-func (s *Server) Query() QueryResolver {
+func (s *GraphqlServer) Query() QueryResolver {
 	return &queryResolver{
 		server: s,
 	}
 }
 
-func (s *Server) Mutation() MutationResolver {
+func (s *GraphqlServer) Mutation() MutationResolver {
 	return &mutationResolver{
 		server: s,
 	}
 }
 
-func (s *Server) Account() AccountResolver {
+func (s *GraphqlServer) Account() AccountResolver {
 	return &accountResolver{
 		server: s,
 	}
 }
 
-func (s *Server) ToExecutableSchema() graphql.ExecutableSchema {
+func (s *GraphqlServer) ToExecutableSchema() graphql.ExecutableSchema {
 	return NewExecutableSchema(Config{Resolvers: s})
 }
