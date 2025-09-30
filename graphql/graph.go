@@ -1,37 +1,22 @@
 package main
 
-import "github.com/99designs/gqlgen/graphql"
+import (
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/saleh-ghazimoradi/MicroMarket/account/gateway/grpcHandler"
+)
 
 type GraphqlServer struct {
-	//accountClient *account.Client
+	gRPCAccountClient *grpcHandler.GRPCAccountClient
 	//catalogClient *catalog.Client
 	//orderClient   *orderClient
 }
 
 func NewGraphqlServer(accountURL, catalogURL, orderURL string) (*GraphqlServer, error) {
-	//accountClient, err := account.NewClient(accountURL)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//
-	//catalogClient, err := catalog.NewClient(catalogURL)
-	//if err != nil {
-	//	accountClient.Close()
-	//	return nil, err
-	//}
-	//
-	//orderClient, err := order.NewClient(orderURL)
-	//if err != nil {
-	//	accountClient.Close()
-	//	catalogClient.Close()
-	//	return nil, err
-	//}
-
-	return &GraphqlServer{
-		//accountClient,
-		//catalogClient,
-		//orderClient,
-	}, nil
+	accountClient, err := grpcHandler.NewGRPCAccountClient(accountURL)
+	if err != nil {
+		return nil, err
+	}
+	return &GraphqlServer{gRPCAccountClient: accountClient}, nil
 }
 
 func (s *GraphqlServer) Query() QueryResolver {

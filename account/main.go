@@ -2,6 +2,8 @@ package main
 
 import (
 	"github.com/saleh-ghazimoradi/MicroMarket/account/config"
+	"github.com/saleh-ghazimoradi/MicroMarket/account/gateway/grpcHandler"
+	"github.com/saleh-ghazimoradi/MicroMarket/account/migrations"
 	"github.com/saleh-ghazimoradi/MicroMarket/account/repository"
 	"github.com/saleh-ghazimoradi/MicroMarket/account/service"
 	"github.com/saleh-ghazimoradi/MicroMarket/account/utils"
@@ -31,6 +33,27 @@ func main() {
 		log.Fatalf("error connecting to database: %v", err)
 	}
 
+	defer func() {
+		if err := db.Close(); err != nil {
+			log.Fatalf("error closing database connection: %v", err)
+		}
+	}()
+
+	migrator, err := migrations.NewMigrator(db, postgresql.Name)
+	if err != nil {
+		log.Fatalf("error initializing migrator: %v", err)
+	}
+
+	if err := migrator.Up(); err != nil {
+		log.Fatalf("error initializing migrator up: %v", err)
+	}
+
 	accountRepository := repository.NewAccountRepository(db, db)
 	accountService := service.NewAccountService(accountRepository)
+	accountHandler := grpcHandler.NewGRPCHandler(accountService)
+
+	log.Println("Server is running on port", cfg.AccountServer.GRPCPort)
+	if err = accountHandler.Serve(cfg.AccountServer.GRPCPort); err != nil {
+		log.Fatalf("error serving grpc handler: %v", err)
+	}
 }
