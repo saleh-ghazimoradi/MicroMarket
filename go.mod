@@ -17,5 +17,7 @@ require (
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
+	github.com/lib/pq v1.10.9 // indirect
+	github.com/segmentio/ksuid v1.0.4 // indirect
 	github.com/sosodev/duration v1.3.1 // indirect
 )
