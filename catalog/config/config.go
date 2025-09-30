@@ -11,7 +11,9 @@ var (
 	initErr  error
 )
 
-type Config struct{}
+type Config struct {
+	ElasticSearch ElasticSearch
+}
 
 func NewConfig() (*Config, error) {
 	once.Do(func() {
