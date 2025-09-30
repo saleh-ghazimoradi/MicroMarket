@@ -3,13 +3,12 @@ package service
 import (
 	"context"
 	"github.com/saleh-ghazimoradi/MicroMarket/account/domain"
-	"github.com/saleh-ghazimoradi/MicroMarket/account/dto"
 	"github.com/saleh-ghazimoradi/MicroMarket/account/repository"
 	"github.com/segmentio/ksuid"
 )
 
 type AccountService interface {
-	CreateAccount(ctx context.Context, input *dto.Account) (*domain.Account, error)
+	CreateAccount(ctx context.Context, name string) (*domain.Account, error)
 	GetAccount(ctx context.Context, id string) (*domain.Account, error)
 	GetAccounts(ctx context.Context, offset, limit uint64) ([]*domain.Account, error)
 }
@@ -18,13 +17,13 @@ type accountService struct {
 	accountRepository repository.AccountRepository
 }
 
-func (a *accountService) CreateAccount(ctx context.Context, input *dto.Account) (*domain.Account, error) {
+func (a *accountService) CreateAccount(ctx context.Context, name string) (*domain.Account, error) {
 	var account domain.Account
 	if err := a.accountRepository.CreateAccount(
 		ctx,
 		&domain.Account{
 			Id:   ksuid.New().String(),
-			Name: input.Name,
+			Name: name,
 		}); err != nil {
 		return nil, err
 	}
@@ -36,6 +35,9 @@ func (a *accountService) GetAccount(ctx context.Context, id string) (*domain.Acc
 }
 
 func (a *accountService) GetAccounts(ctx context.Context, offset, limit uint64) ([]*domain.Account, error) {
+	if limit > 100 || (offset == 0 && limit == 0) {
+		limit = 100
+	}
 	return a.accountRepository.GetAccounts(ctx, offset, limit)
 }
 

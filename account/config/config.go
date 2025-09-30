@@ -12,7 +12,8 @@ var (
 )
 
 type Config struct {
-	Postgresql Postgresql
+	AccountServer AccountServer
+	Postgresql    Postgresql
 }
 
 func NewConfig() (*Config, error) {
