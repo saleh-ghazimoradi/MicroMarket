@@ -1,6 +1,6 @@
 package domain
 
 type Account struct {
-	Id   string
-	Name string
+	Id   string `json:"id"`
+	Name string `json:"name"`
 }

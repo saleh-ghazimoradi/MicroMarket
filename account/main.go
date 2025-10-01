@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/saleh-ghazimoradi/MicroMarket/account/config"
-	"github.com/saleh-ghazimoradi/MicroMarket/account/gateway/grpcHandler"
+	"github.com/saleh-ghazimoradi/MicroMarket/account/gateway/grpcAccountHandler"
 	"github.com/saleh-ghazimoradi/MicroMarket/account/migrations"
 	"github.com/saleh-ghazimoradi/MicroMarket/account/repository"
 	"github.com/saleh-ghazimoradi/MicroMarket/account/service"
@@ -50,7 +50,7 @@ func main() {
 
 	accountRepository := repository.NewAccountRepository(db, db)
 	accountService := service.NewAccountService(accountRepository)
-	accountHandler := grpcHandler.NewGRPCHandler(accountService)
+	accountHandler := grpcAccountHandler.NewGRPCHandler(accountService)
 
 	log.Println("Server is running on port", cfg.AccountServer.GRPCPort)
 	if err = accountHandler.Serve(cfg.AccountServer.GRPCPort); err != nil {

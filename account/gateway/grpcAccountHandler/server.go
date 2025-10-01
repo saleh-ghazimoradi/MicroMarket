@@ -1,4 +1,4 @@
-package grpcHandler
+package grpcAccountHandler
 
 import (
 	"context"
