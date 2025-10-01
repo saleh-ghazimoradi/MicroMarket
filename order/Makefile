@@ -1,5 +1,5 @@
 generate-grpc:
-	protoc --go_out=. --go-grpc_out=. gateway/proto/account.proto
+	protoc --go_out=. --go-grpc_out=. gateway/proto/order.proto
 
 fmt:
 	go fmt ./...
