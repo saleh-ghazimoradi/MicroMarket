@@ -12,6 +12,7 @@ var (
 )
 
 type Config struct {
+	CatalogServer CatalogServer
 	ElasticSearch ElasticSearch
 }
 
