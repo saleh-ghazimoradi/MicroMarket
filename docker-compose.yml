@@ -12,5 +12,19 @@ services:
     ports:
       - ${POSTGRES_PORT}:5432
 
+  catalog-db:
+    image: elasticsearch:5.6.16
+    container_name: ${ELASTICSEARCH_CONTAINER}
+    restart: always
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=${ELASTICSEARCH_PASSWORD}
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - ${ELASTICSEARCH_PORT}:9200
+
 volumes:
   db-data:
+  elasticsearch-data:
