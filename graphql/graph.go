@@ -2,21 +2,31 @@ package main
 
 import (
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/saleh-ghazimoradi/MicroMarket/account/gateway/grpcHandler"
+	"github.com/saleh-ghazimoradi/MicroMarket/account/gateway/grpcAccountHandler"
+	"github.com/saleh-ghazimoradi/MicroMarket/catalog/gateway/gRPCCatalogHandler"
 )
 
 type GraphqlServer struct {
-	gRPCAccountClient *grpcHandler.GRPCAccountClient
-	//catalogClient *catalog.Client
-	//orderClient   *orderClient
+	gRPCAccountClient *grpcAccountHandler.GRPCAccountClient
+	gRPCCatalogClient *gRPCCatalogHandler.GRPCCatalogClient
 }
 
 func NewGraphqlServer(accountURL, catalogURL, orderURL string) (*GraphqlServer, error) {
-	accountClient, err := grpcHandler.NewGRPCAccountClient(accountURL)
+	accountClient, err := grpcAccountHandler.NewGRPCAccountClient(accountURL)
 	if err != nil {
 		return nil, err
 	}
-	return &GraphqlServer{gRPCAccountClient: accountClient}, nil
+
+	catalogClient, err := gRPCCatalogHandler.NewGrpcCatalogClient(catalogURL)
+	if err != nil {
+		return nil, err
+	}
+
+	return &GraphqlServer{
+		gRPCAccountClient: accountClient,
+		gRPCCatalogClient: catalogClient,
+	}, nil
+
 }
 
 func (s *GraphqlServer) Query() QueryResolver {
