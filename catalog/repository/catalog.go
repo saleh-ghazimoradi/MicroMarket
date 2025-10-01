@@ -55,15 +55,74 @@ func (c *catalogRepository) GetCatalogById(ctx context.Context, id string) (*dom
 }
 
 func (c *catalogRepository) GetCatalogs(ctx context.Context, offset, limit uint64) ([]*domain.Catalog, error) {
-	return nil, nil
+	res, err := c.client.Search().Index(c.index).Type("catalog").Query(elastic.NewMatchAllQuery()).From(int(offset)).Size(int(limit)).Do(ctx)
+	if err != nil {
+		return nil, err
+	}
+	var catalogs []*domain.Catalog
+	for _, hit := range res.Hits.Hits {
+		var catalog dto.Catalog
+		if err = json.Unmarshal(*hit.Source, &catalog); err != nil {
+			return nil, err
+		}
+		catalogs = append(catalogs, &domain.Catalog{
+			Id:          hit.Id,
+			Name:        catalog.Name,
+			Description: catalog.Description,
+			Price:       catalog.Price,
+		})
+	}
+	return catalogs, nil
 }
 
 func (c *catalogRepository) GetCatalogsByIds(ctx context.Context, ids []string) ([]*domain.Catalog, error) {
-	return nil, nil
+	var items []*elastic.MultiGetItem
+	for _, id := range ids {
+		items = append(items, elastic.NewMultiGetItem().
+			Index(c.index).
+			Type("catalog").
+			Id(id),
+		)
+	}
+	res, err := c.client.MultiGet().Add(items...).Do(ctx)
+	if err != nil {
+		return nil, err
+	}
+	var catalogs []*domain.Catalog
+	for _, doc := range res.Docs {
+		var catalog dto.Catalog
+		if err = json.Unmarshal(*doc.Source, &catalog); err != nil {
+			return nil, err
+		}
+		catalogs = append(catalogs, &domain.Catalog{
+			Id:          doc.Id,
+			Name:        catalog.Name,
+			Description: catalog.Description,
+			Price:       catalog.Price,
+		})
+	}
+	return catalogs, nil
 }
 
 func (c *catalogRepository) SearchCatalog(ctx context.Context, query string, offset, limit uint64) ([]*domain.Catalog, error) {
-	return nil, nil
+	res, err := c.client.Search().Index(c.index).Type("catalog").Query(elastic.NewMultiMatchQuery(query, "name", "description")).From(int(offset)).Size(int(limit)).Do(ctx)
+	if err != nil {
+		return nil, err
+	}
+	var catalogs []*domain.Catalog
+	for _, hit := range res.Hits.Hits {
+		var catalog dto.Catalog
+		if err = json.Unmarshal(*hit.Source, &catalog); err != nil {
+			return nil, err
+		}
+		catalogs = append(catalogs, &domain.Catalog{
+			Id:          hit.Id,
+			Name:        catalog.Name,
+			Description: catalog.Description,
+			Price:       catalog.Price,
+		})
+	}
+	return catalogs, nil
 }
 
 func (c *catalogRepository) Close() error {
