@@ -24,6 +24,20 @@ services:
       - elasticsearch-data:/usr/share/elasticsearch/data
     ports:
       - ${ELASTICSEARCH_PORT}:9200
+      -
+
+  order-db:
+    image: postgres:latest
+    container_name: ${POSTGRESQL_NAME}
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRESQL_NAME}
+      POSTGRES_USER: ${POSTGRESQL_USER}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - ${POSTGRESQL_PORT}:5432
 
 volumes:
   db-data:
