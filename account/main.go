@@ -48,6 +48,12 @@ func main() {
 		log.Fatalf("error initializing migrator up: %v", err)
 	}
 
+	defer func() {
+		if err = migrator.Close(); err != nil {
+			log.Fatalf("error closing migrator up: %v", err)
+		}
+	}()
+
 	accountRepository := repository.NewAccountRepository(db, db)
 	accountService := service.NewAccountService(accountRepository)
 	accountHandler := grpcAccountHandler.NewGRPCHandler(accountService)
