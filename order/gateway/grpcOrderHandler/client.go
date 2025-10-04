@@ -1,6 +1,10 @@
 package grpcOrderHandler
 
 import (
+	"context"
+	"github.com/saleh-ghazimoradi/MicroMarket/order/domain"
+	"github.com/saleh-ghazimoradi/MicroMarket/order/dto"
+	"github.com/saleh-ghazimoradi/MicroMarket/order/gateway/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -8,6 +12,14 @@ import (
 type GRPCOrderClient struct {
 	conn   *grpc.ClientConn
 	client proto.OrderServiceClient
+}
+
+func (g *GRPCOrderClient) CreateOrder(ctx context.Context, input *dto.Order) (*domain.Order, error) {
+	return nil, nil
+}
+
+func (g *GRPCOrderClient) GetOrdersForAccount(ctx context.Context, accountId string) ([]*domain.Order, error) {
+	return nil, nil
 }
 
 func (g *GRPCOrderClient) Close() error {
