@@ -12,6 +12,7 @@ var (
 )
 
 type Config struct {
+	Order      Order
 	Postgresql Postgresql
 }
 
